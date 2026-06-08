@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مطعم بغداد الملكي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --black: #0B0B0B;
+  --white: #FFFFFF;
+  --gold: #D4AF37;
+  --gold-light: #E8CC6A;
+  --gold-dark: #A8892A;
+  --dark: #1A1A1A;
+  --dark2: #242424;
+  --dark3: #2E2E2E;
+  --gray: #888;
+  --gray-light: #aaa;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: var(--black);
+  color: var(--white);
+  overflow-x: hidden;
+  direction: rtl;
+}
+
+/* LOADING SCREEN */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: var(--black);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+#loader.hidden { opacity: 0; visibility: hidden; }
+.loader-logo {
+  font-family: 'Amiri', serif;
+  font-size: clamp(28px, 6vw, 48px);
+  color: var(--gold);
+  text-align: center;
+  line-height: 1.4;
+  animation: fadeUp 0.8s ease forwards;
+}
+.loader-sub {
+  font-size: 14px;
+  color: var(--gray);
+  letter-spacing: 2px;
+  animation: fadeUp 0.8s 0.2s ease both;
+}
+.loader-bar-wrap {
+  width: 200px;
+  height: 2px;
+  background: var(--dark3);
+  border-radius: 2px;
+  overflow: hidden;
+  animation: fadeUp 0.8s 0.4s ease both;
+}
+.loader-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light));
+  border-radius: 2px;
+  animation: loadBar 2s ease forwards;
+}
+@keyframes loadBar { from { width: 0 } to { width: 100% } }
+
+/* NAVBAR */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 0 40px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.4s ease;
+}
+nav.scrolled {
+  background: rgba(11,11,11,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(212,175,55,0.15);
+  height: 64px;
+}
+.nav-logo {
+  font-family: 'Amiri', serif;
+  font-size: 22px;
+  color: var(--gold);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+  flex-direction: row-reverse;
+}
+.nav-links a {
+  color: var(--gray-light);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.3s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  right: 0;
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+  transition: width 0.3s;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-links a:hover::after { width: 100%; }
+.nav-cta {
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  color: var(--black) !important;
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-weight: 700 !important;
+  white-space: nowrap;
+}
+.nav-cta:hover { transform: scale(1.05); }
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px;
+}
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--gold);
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+.mobile-menu {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(11,11,11,0.97);
+  backdrop-filter: blur(20px);
+  z-index: 999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  color: var(--white);
+  text-decoration: none;
+  font-size: 24px;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+.mobile-menu a:hover { color: var(--gold); }
+.mobile-close {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  font-size: 32px;
+  color: var(--gold);
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* HERO */
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(11,11,11,0.3) 0%, rgba(11,11,11,0.6) 60%, rgba(11,11,11,1) 100%),
+    url('https://images.unsplash.com/photo-1544025162-d76694265947?w=1600&q=80') center/cover no-repeat;
+  transform: scale(1.05);
+  animation: zoomBg 12s ease-in-out infinite alternate;
+}
+@keyframes zoomBg { from { transform: scale(1.05) } to { transform: scale(1.12) } }
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 100%, rgba(212,175,55,0.08) 0%, transparent 70%);
+}
+.hero-content {
+  position: relative;
+  text-align: center;
+  max-width: 800px;
+  padding: 0 24px;
+  animation: heroIn 1.2s 2.8s ease both;
+}
+@keyframes heroIn { from { opacity:0; transform: translateY(40px) } to { opacity:1; transform: translateY(0) } }
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(212,175,55,0.15);
+  border: 1px solid rgba(212,175,55,0.3);
+  backdrop-filter: blur(10px);
+  padding: 6px 18px;
+  border-radius: 100px;
+  font-size: 13px;
+  color: var(--gold);
+  margin-bottom: 28px;
+  letter-spacing: 1px;
+}
+.hero-title {
+  font-family: 'Amiri', serif;
+  font-size: clamp(42px, 9vw, 96px);
+  line-height: 1.2;
+  color: var(--white);
+  text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+  margin-bottom: 8px;
+}
+.hero-title span { color: var(--gold); }
+.hero-tagline {
+  font-size: clamp(15px, 2.5vw, 20px);
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 48px;
+  font-weight: 300;
+  line-height: 1.7;
+}
+.hero-btns {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  color: var(--black);
+  padding: 16px 40px;
+  border-radius: 100px;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s;
+  box-shadow: 0 8px 30px rgba(212,175,55,0.3);
+  font-family: 'Cairo', sans-serif;
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(212,175,55,0.4);
+}
+.btn-secondary {
+  background: rgba(255,255,255,0.08);
+  color: var(--white);
+  padding: 16px 40px;
+  border-radius: 100px;
+  font-size: 16px;
+  font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s;
+  backdrop-filter: blur(10px);
+  font-family: 'Cairo', sans-serif;
+}
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.14);
+  transform: translateY(-3px);
+}
+.scroll-indicator {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255,255,255,0.4);
+  font-size: 12px;
+  animation: bounce 2s infinite;
+}
+.scroll-dot {
+  width: 24px;
+  height: 38px;
+  border: 1.5px solid rgba(212,175,55,0.4);
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  padding-top: 6px;
+}
+.scroll-dot::before {
+  content: '';
+  width: 4px;
+  height: 8px;
+  background: var(--gold);
+  border-radius: 2px;
+  animation: scrollDot 2s infinite;
+}
+@keyframes scrollDot { 0%,100%{transform:translateY(0);opacity:1} 50%{transform:translateY(10px);opacity:0} }
+@keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+
+/* SECTIONS GENERAL */
+section { padding: 100px 0; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--gold);
+  font-size: 13px;
+  letter-spacing: 3px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+.section-label::before, .section-label::after {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: var(--gold);
+}
+.section-title {
+  font-family: 'Amiri', serif;
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1.3;
+  margin-bottom: 16px;
+  text-align: center;
+}
+.section-title span { color: var(--gold); }
+.section-sub {
+  color: var(--gray);
+  font-size: 16px;
+  text-align: center;
+  max-width: 560px;
+  margin: 0 auto 60px;
+  line-height: 1.8;
+}
+.text-center { text-align: center; }
+.gold-divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+  margin: 20px auto 0;
+  border-radius: 2px;
+}
+
+/* WHY US */
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  margin-top: 60px;
+}
+.why-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 24px;
+  padding: 40px 32px;
+  text-align: center;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+}
+.why-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(212,175,55,0.06) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.why-card:hover::before { opacity: 1; }
+.why-card:hover {
+  border-color: rgba(212,175,55,0.3);
+  transform: translateY(-8px);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+}
+.why-icon {
+  width: 72px;
+  height: 72px;
+  background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05));
+  border: 1px solid rgba(212,175,55,0.2);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  font-size: 28px;
+  color: var(--gold);
+  transition: all 0.4s;
+}
+.why-card:hover .why-icon {
+  background: linear-gradient(135deg, rgba(212,175,55,0.25), rgba(212,175,55,0.1));
+  transform: scale(1.1) rotate(5deg);
+}
+.why-title { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+.why-desc { color: var(--gray); font-size: 14px; line-height: 1.8; }
+
+/* MENU */
+.menu-section { background: var(--dark); }
+.menu-cats {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+.cat-btn {
+  padding: 10px 24px;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: transparent;
+  color: var(--gray-light);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Cairo', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cat-btn:hover, .cat-btn.active {
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  color: var(--black);
+  border-color: transparent;
+  box-shadow: 0 8px 24px rgba(212,175,55,0.25);
+}
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+.menu-item {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.4s;
+  cursor: default;
+  display: none;
+}
+.menu-item.visible { display: block; animation: fadeUp 0.5s ease both; }
+.menu-item:hover {
+  transform: translateY(-6px);
+  border-color: rgba(212,175,55,0.25);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+.menu-img-wrap {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+.menu-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.menu-item:hover .menu-img-wrap img { transform: scale(1.08); }
+.popular-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  color: var(--black);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.menu-body { padding: 20px; }
+.menu-name { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.menu-desc { color: var(--gray); font-size: 13px; line-height: 1.7; margin-bottom: 16px; }
+.menu-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.menu-price { color: var(--gold); font-size: 18px; font-weight: 800; }
+.add-btn {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  border: none;
+  border-radius: 10px;
+  color: var(--black);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+.add-btn:hover { transform: scale(1.15) rotate(90deg); }
+
+/* SIGNATURE */
+.sig-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 32px;
+  margin-top: 60px;
+}
+.sig-card {
+  border-radius: 28px;
+  overflow: hidden;
+  position: relative;
+  height: 460px;
+  cursor: default;
+  transition: transform 0.4s ease;
+}
+.sig-card:hover { transform: scale(1.02); }
+.sig-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.sig-card:hover img { transform: scale(1.08); }
+.sig-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(11,11,11,0.95) 0%, rgba(11,11,11,0.3) 60%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 32px;
+}
+.sig-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  color: var(--black);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 100px;
+  width: fit-content;
+  margin-bottom: 12px;
+}
+.sig-name { font-family: 'Amiri', serif; font-size: 28px; margin-bottom: 8px; }
+.sig-desc { color: rgba(255,255,255,0.65); font-size: 14px; line-height: 1.7; margin-bottom: 20px; }
+.sig-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.sig-price { color: var(--gold); font-size: 22px; font-weight: 800; }
+
+/* QR SECTION */
+.qr-section {
+  background: linear-gradient(135deg, var(--dark) 0%, var(--black) 100%);
+  position: relative;
+  overflow: hidden;
+}
+.qr-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(212,175,55,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.qr-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.qr-text .section-title { text-align: right; }
+.qr-text .section-sub { text-align: right; margin: 0; }
+.qr-features { margin-top: 32px; display: flex; flex-direction: column; gap: 16px; }
+.qr-feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(255,255,255,0.8);
+  font-size: 15px;
+}
+.qr-feature i { color: var(--gold); font-size: 16px; width: 20px; }
+.qr-visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+.phone-mock {
+  width: 240px;
+  height: 480px;
+  background: var(--dark2);
+  border-radius: 40px;
+  border: 8px solid var(--dark3);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
+  display: flex;
+  flex-direction: column;
+}
+.phone-notch {
+  width: 80px;
+  height: 20px;
+  background: var(--dark3);
+  border-radius: 0 0 12px 12px;
+  margin: 0 auto 0;
+}
+.phone-screen {
+  flex: 1;
+  background: linear-gradient(180deg, var(--dark2) 0%, var(--dark) 100%);
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+.phone-header {
+  text-align: center;
+  color: var(--gold);
+  font-family: 'Amiri', serif;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+.phone-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  padding: 8px;
+}
+.phone-item-img {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.phone-item-text { flex: 1; overflow: hidden; }
+.phone-item-name { font-size: 10px; font-weight: 700; color: var(--white); }
+.phone-item-price { font-size: 10px; color: var(--gold); font-weight: 600; }
+.qr-code-wrap {
+  background: var(--white);
+  padding: 16px;
+  border-radius: 20px;
+  box-shadow: 0 16px 50px rgba(212,175,55,0.2);
+}
+.qr-code-wrap svg { display: block; }
+.qr-caption {
+  text-align: center;
+  color: var(--gray);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* REVIEWS */
+.reviews-section { background: var(--dark); }
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 60px;
+}
+.review-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 24px;
+  padding: 32px;
+  transition: all 0.4s;
+  position: relative;
+}
+.review-card:hover {
+  border-color: rgba(212,175,55,0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+}
+.review-quote {
+  font-size: 48px;
+  color: var(--gold);
+  opacity: 0.2;
+  font-family: serif;
+  line-height: 1;
+  margin-bottom: -12px;
+}
+.review-text {
+  color: rgba(255,255,255,0.75);
+  font-size: 15px;
+  line-height: 1.8;
+  margin-bottom: 24px;
+}
+.review-footer { display: flex; align-items: center; justify-content: space-between; }
+.reviewer { display: flex; align-items: center; gap: 12px; }
+.reviewer-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--black);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.reviewer-name { font-size: 15px; font-weight: 700; }
+.reviewer-label { font-size: 12px; color: var(--gray); }
+.stars { color: var(--gold); font-size: 13px; letter-spacing: 2px; }
+
+/* RESERVATION */
+.reservation-section {
+  background: linear-gradient(135deg, var(--black) 0%, var(--dark) 50%, var(--black) 100%);
+  position: relative;
+  overflow: hidden;
+}
+.reservation-section::after {
+  content: '';
+  position: absolute;
+  bottom: -100px;
+  right: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(212,175,55,0.05) 0%, transparent 70%);
+}
+.reservation-form {
+  max-width: 600px;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 32px;
+  padding: 48px;
+  backdrop-filter: blur(10px);
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.form-group { display: flex; flex-direction: column; gap: 8px; }
+.form-group label { font-size: 13px; color: var(--gray-light); font-weight: 500; }
+.form-input {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 14px 18px;
+  color: var(--white);
+  font-size: 15px;
+  font-family: 'Cairo', sans-serif;
+  transition: all 0.3s;
+  width: 100%;
+  outline: none;
+  direction: rtl;
+}
+.form-input:focus {
+  border-color: rgba(212,175,55,0.5);
+  background: rgba(212,175,55,0.05);
+  box-shadow: 0 0 0 3px rgba(212,175,55,0.1);
+}
+.form-input::placeholder { color: var(--gray); }
+.form-submit {
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  border: none;
+  border-radius: 14px;
+  color: var(--black);
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+.form-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(212,175,55,0.35);
+}
+
+/* CONTACT */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+  margin-top: 60px;
+}
+.contact-info { display: flex; flex-direction: column; gap: 24px; }
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 18px;
+  padding: 20px 24px;
+  transition: all 0.3s;
+}
+.contact-item:hover {
+  border-color: rgba(212,175,55,0.2);
+  transform: translateX(-4px);
+}
+.contact-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05));
+  border: 1px solid rgba(212,175,55,0.2);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+.contact-label { font-size: 12px; color: var(--gray); margin-bottom: 4px; }
+.contact-val { font-size: 16px; font-weight: 600; }
+.map-placeholder {
+  background: var(--dark2);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 24px;
+  overflow: hidden;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--gray);
+  position: relative;
+}
+.map-placeholder::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&q=60') center/cover;
+  opacity: 0.1;
+}
+.map-placeholder i { font-size: 40px; color: var(--gold); position: relative; }
+.map-placeholder span { font-size: 14px; position: relative; }
+
+/* DESIGNER SECTION */
+.designer-section {
+  background: linear-gradient(135deg, var(--dark) 0%, #0f0f0f 100%);
+  position: relative;
+  overflow: hidden;
+}
+.designer-section::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(212,175,55,0.07) 0%, transparent 60%);
+}
+.designer-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.designer-avatar-wrap {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.designer-avatar-ring {
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  padding: 4px;
+  position: relative;
+}
+.designer-avatar-ring::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  border: 1px solid rgba(212,175,55,0.15);
+  animation: rotateRing 12s linear infinite;
+}
+.designer-avatar-ring::after {
+  content: '';
+  position: absolute;
+  inset: -40px;
+  border-radius: 50%;
+  border: 1px dashed rgba(212,175,55,0.08);
+  animation: rotateRing 20s linear infinite reverse;
+}
+@keyframes rotateRing { to { transform: rotate(360deg); } }
+.designer-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 100px;
+  color: var(--gold);
+}
+.designer-text .section-title { text-align: right; }
+.designer-bio {
+  color: rgba(255,255,255,0.7);
+  font-size: 16px;
+  line-height: 1.9;
+  margin-bottom: 32px;
+  text-align: right;
+}
+.services-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+.service-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.8);
+}
+.service-item i { color: var(--gold); font-size: 13px; }
+.designer-cta-wrap {
+  background: rgba(212,175,55,0.05);
+  border: 1px solid rgba(212,175,55,0.2);
+  border-radius: 20px;
+  padding: 28px;
+}
+.designer-cta-text {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.designer-cta-sub {
+  color: var(--gray);
+  font-size: 14px;
+  margin-bottom: 20px;
+  line-height: 1.7;
+}
+.btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #25D366;
+  color: var(--white);
+  padding: 14px 32px;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.3s;
+  font-family: 'Cairo', sans-serif;
+}
+.btn-whatsapp:hover {
+  background: #1ebe5c;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(37,211,102,0.3);
+}
+
+/* FOOTER */
+footer {
+  background: var(--black);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 40px 0;
+  text-align: center;
+}
+.footer-logo {
+  font-family: 'Amiri', serif;
+  font-size: 26px;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.footer-divider {
+  width: 80px;
+  height: 1px;
+  background: rgba(212,175,55,0.2);
+  margin: 16px auto;
+}
+.footer-text { color: var(--gray); font-size: 13px; line-height: 1.8; }
+.footer-links {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.footer-links a {
+  color: var(--gray);
+  font-size: 13px;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--gold); }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-left { opacity: 0; transform: translateX(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+.reveal-right { opacity: 0; transform: translateX(-40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  color: var(--black);
+  padding: 14px 28px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 700;
+  z-index: 9000;
+  transition: transform 0.4s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .qr-inner, .designer-inner, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+  .qr-text .section-title, .qr-text .section-sub { text-align: center; }
+  .qr-features { align-items: center; }
+  .designer-text .section-title, .designer-bio { text-align: center; }
+  .services-list { justify-content: center; }
+  .designer-cta-text { text-align: center; }
+  .designer-cta-sub { text-align: center; }
+  .designer-cta-wrap { text-align: center; }
+  section { padding: 70px 0; }
+  .reservation-form { padding: 32px 24px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .sig-grid { grid-template-columns: 1fr; }
+  .sig-card { height: 380px; }
+}
+@media (max-width: 600px) {
+  .hero-btns { flex-direction: column; align-items: center; }
+  .btn-primary, .btn-secondary { width: 100%; max-width: 280px; justify-content: center; }
+  .menu-grid { grid-template-columns: 1fr; }
+  .reviews-grid { grid-template-columns: 1fr; }
+  .why-grid { grid-template-columns: 1fr 1fr; }
+  .designer-avatar-ring { width: 200px; height: 200px; }
+}
+@media (max-width: 420px) {
+  .why-grid { grid-template-columns: 1fr; }
+}
+
+/* FLOATING WA BUTTON */
+.float-wa {
+  position: fixed;
+  bottom: 28px;
+  left: 28px;
+  width: 56px;
+  height: 56px;
+  background: #25D366;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  color: white;
+  box-shadow: 0 8px 24px rgba(37,211,102,0.4);
+  z-index: 900;
+  text-decoration: none;
+  transition: all 0.3s;
+  animation: waPulse 3s infinite;
+}
+.float-wa:hover { transform: scale(1.1); }
+@keyframes waPulse {
+  0%,100% { box-shadow: 0 8px 24px rgba(37,211,102,0.4); }
+  50% { box-shadow: 0 8px 40px rgba(37,211,102,0.7), 0 0 0 8px rgba(37,211,102,0.1); }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loader">
+  <div class="loader-logo">مطعم بغداد الملكي<br><small style="font-size:0.5em;color:var(--gray);font-family:'Cairo',sans-serif;letter-spacing:2px;">BAGHDAD ROYAL</small></div>
+  <div class="loader-sub">يتم التحميل...</div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+</div>
+
+<!-- FLOATING WHATSAPP -->
+<a class="float-wa" href="https://wa.me/9647811765139" target="_blank" title="واتساب"><i class="fab fa-whatsapp"></i></a>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toast-msg">تمت العملية بنجاح</span></div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-logo">⟡ بغداد الملكي</div>
+  <ul class="nav-links">
+    <li><a href="#menu" class="nav-cta">تصفح المنيو</a></li>
+    <li><a href="#reservation">احجز الآن</a></li>
+    <li><a href="#reviews">الآراء</a></li>
+    <li><a href="#contact">تواصل</a></li>
+    <li><a href="#why">عن المطعم</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
+  <a href="#why" onclick="toggleMenu()">عن المطعم</a>
+  <a href="#menu" onclick="toggleMenu()">المنيو</a>
+  <a href="#signature" onclick="toggleMenu()">الأكثر طلباً</a>
+  <a href="#reviews" onclick="toggleMenu()">الآراء</a>
+  <a href="#reservation" onclick="toggleMenu()">حجز طاولة</a>
+  <a href="#contact" onclick="toggleMenu()">تواصل معنا</a>
+  <a href="https://wa.me/9647811765139" class="btn-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> واتساب</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><i class="fas fa-crown"></i> مطعم راقي منذ ٢٠١٠</div>
+    <h1 class="hero-title">مطعم <span>بغداد</span><br>الملكي</h1>
+    <p class="hero-tagline">أشهى المأكولات العراقية والعالمية<br>في مكان واحد</p>
+    <div class="hero-btns">
+      <a href="#menu" class="btn-primary"><i class="fas fa-utensils"></i> تصفح المنيو</a>
+      <a href="#reservation" class="btn-secondary"><i class="fas fa-calendar-check"></i> احجز الآن</a>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <div class="scroll-dot"></div>
+    <span>اسحب للأسفل</span>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why" style="background:var(--black);">
+  <div class="container">
+    <div class="text-center reveal">
+      <div class="section-label">⟡ تميّزنا</div>
+      <h2 class="section-title">لماذا يختارنا <span>الزبائن؟</span></h2>
+      <div class="gold-divider"></div>
+      <p class="section-sub">نحرص على تقديم تجربة طعام استثنائية تجمع بين الجودة والأصالة والضيافة</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal" style="transition-delay:0.1s">
+        <div class="why-icon"><i class="fas fa-award"></i></div>
+        <div class="why-title">جودة عالية</div>
+        <div class="why-desc">نستخدم أفضل الخامات وأحدث معايير الجودة في تحضير كل وجبة</div>
+      </div>
+      <div class="why-card reveal" style="transition-delay:0.2s">
+        <div class="why-icon"><i class="fas fa-leaf"></i></div>
+        <div class="why-title">مكونات طازجة</div>
+        <div class="why-desc">جميع مكوناتنا طازجة يومياً من أفضل المصادر المحلية المختارة</div>
+      </div>
+      <div class="why-card reveal" style="transition-delay:0.3s">
+        <div class="why-icon"><i class="fas fa-bolt"></i></div>
+        <div class="why-title">خدمة سريعة</div>
+        <div class="why-desc">فريقنا المدرّب يضمن وصول طلبك بأسرع وقت مع أعلى مستوى من الاهتمام</div>
+      </div>
+      <div class="why-card reveal" style="transition-delay:0.4s">
+        <div class="why-icon"><i class="fas fa-couch"></i></div>
+        <div class="why-title">أجواء مريحة</div>
+        <div class="why-desc">ديكور راقٍ وإضاءة هادئة تخلق لك أجواء لا تُنسى مع عائلتك وأصدقائك</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="menu-section" id="menu">
+  <div class="container">
+    <div class="text-center reveal">
+      <div class="section-label">⟡ قائمة الطعام</div>
+      <h2 class="section-title">قائمة <span>الأطباق</span></h2>
+      <div class="gold-divider"></div>
+      <p class="section-sub">تشكيلة واسعة من أشهى الأطباق العراقية والعالمية</p>
+    </div>
+    <div class="menu-cats reveal">
+      <button class="cat-btn active" data-cat="all"><i class="fas fa-border-all"></i> الكل</button>
+      <button class="cat-btn" data-cat="grill"><i class="fas fa-fire"></i> المشاوي</button>
+      <button class="cat-btn" data-cat="starters"><i class="fas fa-seedling"></i> المقبلات</button>
+      <button class="cat-btn" data-cat="burger"><i class="fas fa-burger"></i> البرغر</button>
+      <button class="cat-btn" data-cat="pizza"><i class="fas fa-pizza-slice"></i> البيتزا</button>
+      <button class="cat-btn" data-cat="drinks"><i class="fas fa-glass-water"></i> المشروبات</button>
+      <button class="cat-btn" data-cat="desserts"><i class="fas fa-cake-candles"></i> الحلويات</button>
+    </div>
+    <div class="menu-grid" id="menuGrid">
+
+      <!-- GRILL -->
+      <div class="menu-item visible" data-cat="grill">
+        <div class="menu-img-wrap">
+          <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=500&q=80" alt="كباب عراقي" loading="lazy">
+          <span class="popular-badge"><i class="fas fa-fire"></i> الأكثر طلباً</span>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">كباب عراقي فاخر</div>
+          <div class="menu-desc">مشوي على الفحم مع توابل خاصة وخبز تنور طازج</div>
+          <div class="menu-footer">
+            <div class="menu-price">12,000 د.ع</div>
+            <button class="add-btn" onclick="addToast('تم إضافة الكباب للطلب')"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-item visible" data-cat="grill">
+        <div class="menu-img-wrap">
+          <img src="https://images.unsplash.com/photo-1529694157872-4e0c0f3b238b?w=500&q=80" alt="مشاوي مشكلة" loading="lazy">
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">مشاوي مشكلة</div>
+          <div class="menu-desc">تشكيلة من الكباب والجوجه والشيش طاووق على الفحم</div>
+          <div class="menu-footer">
+            <div class="menu-price">25,000 د.ع</div>
+            <button class="add-btn" onclick="addToast('تم إضافة المشاوي للطلب')"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-item visible" data-cat="grill">
+        <div class="menu-img-wrap">
+          <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&q=80" alt="شيش طاووق" loading="lazy">
+          <span class="popular-badge"><i class="fas fa-star"></i> مميز</span>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">شيش طاووق</div>
+          <div class="menu-desc">دجاج طري متبّل بالليمون والثوم مشوي على الفحم</div>
+          <div class="menu-footer">
+            <div class="menu-price">14,000 د.ع</div>
+            <button class="add-btn" onclick="addToast('تم الإضافة للطلب')"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STARTERS -->
+      <div class="menu-item visible" data-cat="starters">
+        <div class="menu-img-wrap">
+          <img src="https://images.unsplash.com/photo-1572449043416-55f4685c9bb7?w=500&q=80" alt="حمص" loading="lazy">
+          <span class="popular-badge"><i class="fas fa-fire"></i> الأكثر طلباً</span>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">حمص بالطحينة</div>
+          <div class="menu-desc">حمص كريمي ناعم مع زيت زيتون بكر وتوابل خاصة</div>
+          <div class="menu-footer">
+            <div class="menu-price">5,000 د.ع</div>
+            <button class="add-btn" onclick="addToast('تم إضافة الحمص للطلب')"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-item visible" data-cat="starters">
+        <div class="menu-img-wrap">
+          <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500&q=80" alt="سلطة" loading="lazy">
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">سلطة فتوش</div>
+          <div class="menu-desc">خضروات طازجة مع خبز محمص وصلصة الرمان</div>
+          <div class="menu-footer">
+            <div class="menu-price">6,000 د.ع</div>
+            <button class="add-btn" onclick="addToast('تم الإضافة للطلب')"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- BURGER -->
+      <div class="menu-item visible" data-cat="burger">
+        <div class="menu-img-wrap">
+          <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80" alt="برغر فاخر" loading="lazy">
+          <span class="popular-badge"><i class="fas fa-fire"></i> الأكثر طلباً</span>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">برغر الملكي</div>
+          <div class="menu-desc">لحم بقري فاخر ١٨٠ غرام مع الجبن والتوابل السرية</div>
+          <div class="menu-footer">
+            <div class="menu-price">15,000 د.ع</div>
+            <button class="add-btn" onclick="addToast('تم إضافة البرغر للطلب')"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-item visible" data-cat="burger">
+        <div class="menu-img-wrap">
+          <img src="https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=500&q=80" alt="دجاج برغر" loading="lazy">
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">كريسبي تشيكن</div>
+          <div class="menu-desc">دجاج مقرمش بالصلصة الحارة مع خس طازج ومخلل</div>
+          <div class="menu-footer">
+            <div class="menu-price">13,000 د.ع</div>
+            <button class="add-btn" onclick="addToast('تم الإضافة للطلب')"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PIZZA -->
+      <div class="menu-item visible" data-cat="pizza">
+        <div class="menu-img-wrap">
+          <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500&q=80" alt="بيتزا" loading="lazy">
+          <span class="popular-badge"><i class="fas fa-star"></i> مميز</span>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">بيتزا الملكي المشكلة</div>
+          <div class="menu-desc">عجينة إيطالية مع لحم وفطر وفلفل ملون وجبن موزاريلا</div>
+          <div class="menu-footer">
+            <div class="menu-price">18,000 د.ع</div>
+            <button class="add-btn" onclick="addToast('تم إضافة البيتزا للطلب')"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DRINKS -->
+      <div class="menu-item visible" data-cat="drinks">
+        <div class="menu-img-wrap">
+          <img src="https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&q=80" alt="عصير" loading="lazy">
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">عصير موسمي طازج</div>
+          <div class="menu-desc">مزيج من الفواكه الموسمية الطازجة بدون سكر مضاف</div>
+          <div class="menu-footer">
+            <div class="menu-price">5,000 د.ع</div>
+            <button class="add-btn" onclick="addToast('تم إضافة العصير للطلب')"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-item visible" data-cat="drinks">
+        <div class="menu-img-wrap">
+          <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=500&q=80" alt="شاي" loading="lazy">
+          <span class="popular-badge"><i class="fas fa-fire"></i> الأكثر طلباً</span>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">شاي عراقي أصيل</div>
+          <div class="menu-desc">شاي هيل وزعفران محضّر بالطريقة العراقية الأصيلة</div>
+          <div class="menu-footer">
+            <div class="menu-price">2,000 د.ع</div>
+            <button class="add-btn" onclick="addToast('تم إضافة الشاي للطلب')"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DESSERTS -->
+      <div class="menu-item visible" data-cat="desserts">
+        <div class="menu-img-wrap">
+          <img src="https://images.unsplash.com/photo-1519915028121-7d3463d20b13?w=500&q=80" alt="كنافة" loading="lazy">
+          <span class="popular-badge"><i class="fas fa-fire"></i> الأكثر طلباً</span>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">كنافة بالجبن</div>
+          <div class="menu-desc">كنافة نابلسية بجبن المشكلة مع قطر عثماني وفستق حلبي</div>
+          <div class="menu-footer">
+            <div class="menu-price">8,000 د.ع</div>
+            <button class="add-btn" onclick="addToast('تم إضافة الكنافة للطلب')"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-item visible" data-cat="desserts">
+        <div class="menu-img-wrap">
+          <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=500&q=80" alt="حلويات" loading="lazy">
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">مهلبية الزعفران</div>
+          <div class="menu-desc">حلوى كريمية بالزعفران والماء الورد والفستق المطحون</div>
+          <div class="menu-footer">
+            <div class="menu-price">7,000 د.ع</div>
+            <button class="add-btn" onclick="addToast('تم الإضافة للطلب')"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SIGNATURE DISHES -->
+<section id="signature" style="background:var(--black);">
+  <div class="container">
+    <div class="text-center reveal">
+      <div class="section-label">⟡ طلبات مميزة</div>
+      <h2 class="section-title"><span>الأكثر</span> طلباً</h2>
+      <div class="gold-divider"></div>
+      <p class="section-sub">اختيارات زبائننا الأوفياء والأكثر طلباً في المطعم</p>
+    </div>
+    <div class="sig-grid">
+      <div class="sig-card reveal-left">
+        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80" alt="كباب" loading="lazy">
+        <div class="sig-overlay">
+          <span class="sig-badge"><i class="fas fa-crown"></i> الأكثر طلباً</span>
+          <div class="sig-name">كباب عراقي فاخر</div>
+          <div class="sig-desc">مشوي على الفحم الطبيعي مع توابل سرية خاصة وخبز تنور ساخن وصلصة الطماطم</div>
+          <div class="sig-footer">
+            <div class="sig-price">12,000 د.ع</div>
+            <a href="#reservation" class="btn-primary" style="padding:12px 24px;font-size:14px;"><i class="fas fa-plus"></i> اطلب الآن</a>
+          </div>
+        </div>
+      </div>
+      <div class="sig-card reveal" style="transition-delay:0.2s">
+        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=80" alt="برغر" loading="lazy">
+        <div class="sig-overlay">
+          <span class="sig-badge"><i class="fas fa-fire"></i> جديد</span>
+          <div class="sig-name">برغر الملكي الفاخر</div>
+          <div class="sig-desc">لحم بقري طازج ١٨٠ غرام مع صلصة الملكي السرية وجبن شيدر ذائب وملفوف أرجواني</div>
+          <div class="sig-footer">
+            <div class="sig-price">15,000 د.ع</div>
+            <a href="#reservation" class="btn-primary" style="padding:12px 24px;font-size:14px;"><i class="fas fa-plus"></i> اطلب الآن</a>
+          </div>
+        </div>
+      </div>
+      <div class="sig-card reveal-right">
+        <img src="https://images.unsplash.com/photo-1519915028121-7d3463d20b13?w=800&q=80" alt="كنافة" loading="lazy">
+        <div class="sig-overlay">
+          <span class="sig-badge"><i class="fas fa-heart"></i> المفضل</span>
+          <div class="sig-name">كنافة بالجبن</div>
+          <div class="sig-desc">كنافة نابلسية أصيلة بجبن المشكلة الطازج وقطر الزهرة وفستق حلبي مطحون</div>
+          <div class="sig-footer">
+            <div class="sig-price">8,000 د.ع</div>
+            <a href="#reservation" class="btn-primary" style="padding:12px 24px;font-size:14px;"><i class="fas fa-plus"></i> اطلب الآن</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QR MENU -->
+<section class="qr-section" id="qrmenu">
+  <div class="container">
+    <div class="qr-inner">
+      <div class="qr-text reveal-right">
+        <div class="section-label">⟡ منيو رقمي</div>
+        <h2 class="section-title">امسح الرمز<br>واستعرض <span>المنيو</span> فوراً</h2>
+        <div class="gold-divider" style="margin:20px 0;"></div>
+        <p class="section-sub" style="text-align:right;margin:0 0 24px;">بدون تطبيق • بدون تسجيل • بضغطة واحدة</p>
+        <div class="qr-features">
+          <div class="qr-feature"><i class="fas fa-check-circle"></i> عرض كامل للمنيو مع الصور</div>
+          <div class="qr-feature"><i class="fas fa-check-circle"></i> تحديث فوري للأسعار والأصناف</div>
+          <div class="qr-feature"><i class="fas fa-check-circle"></i> يعمل على جميع الأجهزة</div>
+          <div class="qr-feature"><i class="fas fa-check-circle"></i> يمكن الطلب مباشرة</div>
+        </div>
+      </div>
+      <div class="qr-visual reveal-left">
+        <div class="phone-mock">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="phone-header">🍽 بغداد الملكي</div>
+            <div class="phone-item">
+              <img class="phone-item-img" src="https://images.unsplash.com/photo-1544025162-d76694265947?w=100&q=80" alt="">
+              <div class="phone-item-text"><div class="phone-item-name">كباب عراقي</div><div class="phone-item-price">12,000 د.ع</div></div>
+            </div>
+            <div class="phone-item">
+              <img class="phone-item-img" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=100&q=80" alt="">
+              <div class="phone-item-text"><div class="phone-item-name">برغر الملكي</div><div class="phone-item-price">15,000 د.ع</div></div>
+            </div>
+            <div class="phone-item">
+              <img class="phone-item-img" src="https://images.unsplash.com/photo-1519915028121-7d3463d20b13?w=100&q=80" alt="">
+              <div class="phone-item-text"><div class="phone-item-name">كنافة بالجبن</div><div class="phone-item-price">8,000 د.ع</div></div>
+            </div>
+            <div class="phone-item">
+              <img class="phone-item-img" src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=100&q=80" alt="">
+              <div class="phone-item-text"><div class="phone-item-name">بيتزا مشكلة</div><div class="phone-item-price">18,000 د.ع</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="qr-code-wrap">
+          <svg width="140" height="140" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+            <rect width="140" height="140" fill="white"/>
+            <!-- QR pattern simulation -->
+            <rect x="10" y="10" width="50" height="50" rx="6" fill="#0B0B0B"/>
+            <rect x="17" y="17" width="36" height="36" rx="3" fill="white"/>
+            <rect x="24" y="24" width="22" height="22" rx="2" fill="#0B0B0B"/>
+            <rect x="80" y="10" width="50" height="50" rx="6" fill="#0B0B0B"/>
+            <rect x="87" y="17" width="36" height="36" rx="3" fill="white"/>
+            <rect x="94" y="24" width="22" height="22" rx="2" fill="#0B0B0B"/>
+            <rect x="10" y="80" width="50" height="50" rx="6" fill="#0B0B0B"/>
+            <rect x="17" y="87" width="36" height="36" rx="3" fill="white"/>
+            <rect x="24" y="94" width="22" height="22" rx="2" fill="#0B0B0B"/>
+            <rect x="70" y="70" width="8" height="8" fill="#0B0B0B"/>
+            <rect x="82" y="70" width="8" height="8" fill="#0B0B0B"/>
+            <rect x="94" y="70" width="8" height="8" fill="#0B0B0B"/>
+            <rect x="106" y="70" width="8" height="8" fill="#0B0B0B"/>
+            <rect x="118" y="70" width="8" height="8" fill="#0B0B0B"/>
+            <rect x="70" y="82" width="8" height="8" fill="#0B0B0B"/>
+            <rect x="94" y="82" width="8" height="8" fill="#0B0B0B"/>
+            <rect x="118" y="82" width="8" height="8" fill="#0B0B0B"/>
+            <rect x="70" y="94" width="8" height="8" fill="#0B0B0B"/>
+            <rect x="82" y="94" width="8" height="8" fill="#0B0B0B"/>
+            <rect x="106" y="94" width="8" height="8" fill="#0B0B0B"/>
+            <rect x="70" y="106" width="8" height="8" fill="#0B0B0B"/>
+            <rect x="94" y="106" width="8" height="8" fill="#0B0B0B"/>
+            <rect x="118" y="106" width="8" height="8" fill="#0B0B0B"/>
+            <rect x="70" y="118" width="8" height="8" fill="#0B0B0B"/>
+            <rect x="82" y="118" width="8" height="8" fill="#0B0B0B"/>
+            <rect x="94" y="118" width="8" height="8" fill="#0B0B0B"/>
+            <rect x="106" y="118" width="8" height="8" fill="#D4AF37"/>
+            <rect x="118" y="118" width="8" height="8" fill="#0B0B0B"/>
+          </svg>
+        </div>
+        <p class="qr-caption">امسح الرمز بكاميرا هاتفك<br>لعرض المنيو الرقمي كاملاً</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews-section" id="reviews">
+  <div class="container">
+    <div class="text-center reveal">
+      <div class="section-label">⟡ تقييمات</div>
+      <h2 class="section-title">آراء <span>زبائننا</span></h2>
+      <div class="gold-divider"></div>
+      <p class="section-sub">أكثر من ٥٠٠٠ زبون راضٍ يثق بنا</p>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card reveal" style="transition-delay:0.1s">
+        <div class="review-quote">"</div>
+        <p class="review-text">مطعم استثنائي بكل المقاييس. الكباب العراقي أعادني لطعم طفولتي في بغداد. الخدمة سريعة والأجواء رائعة جداً، سأعود بالتأكيد.</p>
+        <div class="review-footer">
+          <div class="reviewer">
+            <div class="reviewer-avatar">أ</div>
+            <div>
+              <div class="reviewer-name">أحمد الكاظمي</div>
+              <div class="reviewer-label">زبون دائم • بغداد</div>
+            </div>
+          </div>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+      <div class="review-card reveal" style="transition-delay:0.2s">
+        <div class="review-quote">"</div>
+        <p class="review-text">أفضل مطعم زرته في الوزيرية. الحمص والمشاوي لا مثيل لهم. الديكور أنيق جداً ويناسب العائلات. أنصح كل أهل بغداد بتجربته.</p>
+        <div class="review-footer">
+          <div class="reviewer">
+            <div class="reviewer-avatar">س</div>
+            <div>
+              <div class="reviewer-name">سارة العبيدي</div>
+              <div class="reviewer-label">زبونة جديدة • الكرادة</div>
+            </div>
+          </div>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+      <div class="review-card reveal" style="transition-delay:0.3s">
+        <div class="review-quote">"</div>
+        <p class="review-text">تجربة ممتازة من البداية للنهاية. الموظفون مهذبون والطعام يُقدَّم ساخناً وطازجاً. المنيو الرقمي رائع وسهل الاستخدام. شكراً لكم.</p>
+        <div class="review-footer">
+          <div class="reviewer">
+            <div class="reviewer-avatar">م</div>
+            <div>
+              <div class="reviewer-name">محمد الجبوري</div>
+              <div class="reviewer-label">زبون دائم • الأعظمية</div>
+            </div>
+          </div>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESERVATION -->
+<section class="reservation-section" id="reservation">
+  <div class="container">
+    <div class="text-center reveal">
+      <div class="section-label">⟡ حجز</div>
+      <h2 class="section-title">احجز <span>طاولتك</span> الآن</h2>
+      <div class="gold-divider"></div>
+      <p class="section-sub">احجز طاولتك بكل سهولة وسنتواصل معك للتأكيد</p>
+    </div>
+    <div class="reservation-form reveal" style="transition-delay:0.2s">
+      <div class="form-grid">
+        <div class="form-group">
+          <label><i class="fas fa-user" style="color:var(--gold);margin-left:6px;"></i> الاسم الكامل</label>
+          <input type="text" class="form-input" placeholder="أدخل اسمك الكامل" id="res-name">
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-phone" style="color:var(--gold);margin-left:6px;"></i> رقم الهاتف</label>
+          <input type="tel" class="form-input" placeholder="07XX XXX XXXX" id="res-phone">
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label><i class="fas fa-calendar" style="color:var(--gold);margin-left:6px;"></i> تاريخ الحجز</label>
+          <input type="date" class="form-input" id="res-date">
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-users" style="color:var(--gold);margin-left:6px;"></i> عدد الأشخاص</label>
+          <input type="number" class="form-input" placeholder="٢" min="1" max="20" id="res-guests">
+        </div>
+      </div>
+      <button class="form-submit" onclick="handleReservation()">
+        <i class="fas fa-check-circle"></i>
+        تأكيد الحجز
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="background:var(--dark);">
+  <div class="container">
+    <div class="text-center reveal">
+      <div class="section-label">⟡ تواصل</div>
+      <h2 class="section-title">تواصل <span>معنا</span></h2>
+      <div class="gold-divider"></div>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info reveal-right">
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-phone"></i></div>
+          <div>
+            <div class="contact-label">الهاتف</div>
+            <div class="contact-val">0781 176 5139</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon" style="background:rgba(37,211,102,0.1);border-color:rgba(37,211,102,0.2);color:#25D366;"><i class="fab fa-whatsapp"></i></div>
+          <div>
+            <div class="contact-label">واتساب</div>
+            <div class="contact-val"><a href="https://wa.me/9647811765139" target="_blank" style="color:inherit;text-decoration:none;">0781 176 5139</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-location-dot"></i></div>
+          <div>
+            <div class="contact-label">العنوان</div>
+            <div class="contact-val">بغداد - الوزيرية</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-clock"></i></div>
+          <div>
+            <div class="contact-label">أوقات العمل</div>
+            <div class="contact-val">١١ صباحاً – ١٢ منتصف الليل</div>
+          </div>
+        </div>
+        <a href="https://wa.me/9647811765139" class="btn-whatsapp" target="_blank">
+          <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
+        </a>
+      </div>
+      <div class="map-placeholder reveal-left">
+        <i class="fas fa-map-location-dot"></i>
+        <span style="font-size:16px;color:var(--white);font-weight:600;">بغداد - الوزيرية</span>
+        <span>اضغط لفتح الخريطة</span>
+        <a href="https://maps.google.com/?q=الوزيرية+بغداد" target="_blank" class="btn-primary" style="position:relative;margin-top:12px;font-size:14px;padding:12px 28px;">
+          <i class="fas fa-map"></i> افتح في خرائط جوجل
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DESIGNER SECTION -->
+<section class="designer-section" id="designer">
+  <div class="container">
+    <div class="designer-inner">
+      <div class="designer-avatar-wrap reveal-right">
+        <div class="designer-avatar-ring">
+          <div class="designer-avatar"><i class="fas fa-code"></i></div>
+        </div>
+      </div>
+      <div class="designer-text reveal-left">
+        <div class="section-label">⟡ المصمم</div>
+        <h2 class="section-title" style="font-size:clamp(28px,4vw,48px);">من تصميم <span>حسين</span></h2>
+        <div class="gold-divider" style="margin:16px 0 24px;"></div>
+        <p class="designer-bio">
+          أصمم مواقع إلكترونية احترافية ومنيوهات رقمية للمطاعم والمقاهي والمتاجر لمساعدتك على جذب المزيد من العملاء وإظهار نشاطك التجاري بصورة احترافية.
+        </p>
+        <div class="services-list">
+          <div class="service-item"><i class="fas fa-check-circle"></i> مواقع مطاعم</div>
+          <div class="service-item"><i class="fas fa-check-circle"></i> منيوهات رقمية</div>
+          <div class="service-item"><i class="fas fa-check-circle"></i> مواقع شركات</div>
+          <div class="service-item"><i class="fas fa-check-circle"></i> متاجر إلكترونية</div>
+          <div class="service-item"><i class="fas fa-check-circle"></i> أنظمة طلب أونلاين</div>
+          <div class="service-item"><i class="fas fa-check-circle"></i> تصميم الهوية البصرية</div>
+        </div>
+        <div class="designer-cta-wrap">
+          <div class="designer-cta-text">هل ترغب بموقع مشابه لمطعمك؟</div>
+          <div class="designer-cta-sub">تواصل مع حسين الآن وسيساعدك على بناء موقعك الاحترافي بأسعار مناسبة.</div>
+          <a href="https://wa.me/9647811765139?text=مرحباً حسين، أريد موقعاً لمطعمي" target="_blank" class="btn-whatsapp">
+            <i class="fab fa-whatsapp"></i> تواصل مع حسين الآن
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-logo">مطعم بغداد الملكي</div>
+    <div class="footer-divider"></div>
+    <div class="footer-links">
+      <a href="#home">الرئيسية</a>
+      <a href="#menu">المنيو</a>
+      <a href="#reservation">الحجز</a>
+      <a href="#contact">التواصل</a>
+      <a href="#designer">المصمم</a>
+    </div>
+    <div class="footer-divider"></div>
+    <p class="footer-text">
+      من تصميم <a href="https://wa.me/9647811765139" target="_blank" style="color:var(--gold);text-decoration:none;font-weight:700;">حسين</a> — مصمم مواقع إلكترونية ومنيوهات رقمية للمطاعم<br>
+      جميع الحقوق محفوظة © 2026
+    </p>
+  </div>
+</footer>
+
+<script>
+// LOADER
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+  }, 2800);
+});
+
+// NAVBAR SCROLL
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// MOBILE MENU
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+// MENU FILTER
+document.querySelectorAll('.cat-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const cat = btn.dataset.cat;
+    document.querySelectorAll('.menu-item').forEach((item, i) => {
+      const match = cat === 'all' || item.dataset.cat === cat;
+      if (match) {
+        item.classList.add('visible');
+        item.style.animationDelay = (i * 0.05) + 's';
+      } else {
+        item.classList.remove('visible');
+      }
+    });
+  });
+});
+
+// TOAST
+function addToast(msg) {
+  const toast = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// RESERVATION
+function handleReservation() {
+  const name = document.getElementById('res-name').value.trim();
+  const phone = document.getElementById('res-phone').value.trim();
+  const date = document.getElementById('res-date').value;
+  const guests = document.getElementById('res-guests').value;
+
+  if (!name || !phone || !date) {
+    addToast('يرجى ملء جميع الحقول المطلوبة');
+    return;
+  }
+
+  const msg = `مرحباً، أريد حجز طاولة.\nالاسم: ${name}\nالهاتف: ${phone}\nالتاريخ: ${date}\nعدد الأشخاص: ${guests || '٢'}`;
+  const waUrl = `https://wa.me/9647811765139?text=${encodeURIComponent(msg)}`;
+  window.open(waUrl, '_blank');
+  addToast('جارٍ التحويل إلى واتساب...');
+}
+
+// SCROLL REVEAL
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
